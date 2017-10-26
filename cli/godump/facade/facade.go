@@ -16,7 +16,7 @@ const (
 	//Name is applicatin name
 	Name = "godump"
 	//Version is version for applicatin
-	Version = "dev"
+	Version = "v0.1.0"
 )
 
 //ExitCode is OS exit code enumeration class

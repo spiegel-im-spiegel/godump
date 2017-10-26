@@ -14,14 +14,6 @@ Installing by [dep].
 $ dep ensure -add github.com/spiegel-im-spiegel/godump
 ```
 
-## Dependencies
-
-```
-dep status -dot | dot -Tpng -o dependency.png
-```
-
-[![Dependencies](dependency.png)](dependency.png)
-
 ## Usage
 
 ```go
@@ -58,6 +50,14 @@ hello world
 $ godump -n foobar input.txt
 var foobar = []byte{0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x77, 0x6f, 0x72, 0x6c, 0x64}
 ```
+
+### Dependencies (CLI only)
+
+```
+dep status -dot | dot -Tpng -o dependency.png
+```
+
+[![Dependencies](dependency.png)](dependency.png)
 
 [godump]: https://github.com/spiegel-im-spiegel/godump
 [dep]: https://github.com/golang/dep "golang/dep: Go dependency management tool"
