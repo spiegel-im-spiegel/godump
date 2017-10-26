@@ -16,7 +16,7 @@ func DumpBytes(r io.Reader, name string) (io.Reader, error) {
 		if _, err = r.Read(b); err != nil {
 			break
 		}
-		fmt.Printf("%s%#02x", sep, b)
+		fmt.Fprintf(buf, "%s%#02x", sep, b)
 		sep = ", "
 	}
 	fmt.Fprintln(buf, "}")
