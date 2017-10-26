@@ -1,9 +1,6 @@
 package facade
 
 import (
-	"bytes"
-	"io"
-	"io/ioutil"
 	"os"
 	"runtime"
 
@@ -16,7 +13,7 @@ const (
 	//Name is applicatin name
 	Name = "godump"
 	//Version is version for applicatin
-	Version = "v0.1.0"
+	Version = "v0.1.1"
 )
 
 //ExitCode is OS exit code enumeration class
@@ -47,8 +44,7 @@ func (c ExitCode) String() string {
 }
 
 var (
-	reader io.Reader //input reader (maybe os.Stdin)
-	result io.Reader //result string
+	cui = gocli.NewUI()
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -59,6 +55,7 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+		reader := cui.Reader()
 		if len(args) > 0 {
 			file, err2 := os.Open(args[0]) //args[0] is maybe file path
 			if err2 != nil {
@@ -67,14 +64,18 @@ var rootCmd = &cobra.Command{
 			defer file.Close()
 			reader = file
 		}
-		result, err = godump.DumpBytes(reader, name)
-		return err
+		result, err := godump.DumpBytes(reader, name)
+		if err != nil {
+			return err
+		}
+		cui.WriteFrom(result)
+		return nil
 	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute(cui *gocli.UI) (exit ExitCode) {
+func Execute(ui *gocli.UI) (exit ExitCode) {
 	defer func() {
 		//panic hundling
 		if r := recover(); r != nil {
@@ -92,17 +93,13 @@ func Execute(cui *gocli.UI) (exit ExitCode) {
 
 	//execution
 	exit = Normal
-	reader = cui.Reader() //default reader; maybe os.Stdin
+	cui = ui
 	if err := rootCmd.Execute(); err != nil {
-		//cui.OutputErrln(err) //no need to output error
 		exit = Abnormal
-		return
 	}
-	cui.WriteFrom(result)
 	return
 }
 
 func init() {
-	result = ioutil.NopCloser(bytes.NewReader(nil))
 	rootCmd.Flags().StringP("name", "n", "dumpList", "value name")
 }
