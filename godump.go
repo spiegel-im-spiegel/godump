@@ -6,7 +6,7 @@ import (
 	"io"
 )
 
-//DumpBytes returns binary data from io.Reader
+//DumpBytes returns []bytes literal string
 func DumpBytes(r io.Reader, name string) (io.Reader, error) {
 	buf := new(bytes.Buffer)
 	b := make([]byte, 1)
